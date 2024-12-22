@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import User from "../models/User"; 
 import config from "./index.js"; 
+import { userService } from "../services/index.js";
 
 
 passport.use(
@@ -12,18 +12,22 @@ passport.use(
             callbackURL: config.auth.google.callbackUrl,
         },
         async function(token, tokenSecret, profile, done) {
-            const user = await User.findOne({ googleId: profile.id });
-            if (!user) {
-                const newUser = new User({
-                    googleId: profile.id,
-                    name: profile.displayName,
-                    email: profile.emails[0].value,
-                    profilePic: profile.photos[0].value,
-                });
-                await newUser.save();
-                return done(null, newUser);
+            try {
+                const user = await userService.findOne({ googleId: profile.id });
+                if (!user) {
+                    const newUser = await userService.create({
+                        googleId: profile.id,
+                        name: profile.displayName,
+                        email: profile.emails[0].value,
+                        profilePic: profile.photos[0] ? profile.photos[0].value : " ", 
+                    });
+                    return done(null, newUser);
+                }
+                return done(null, user);
+            } 
+            catch (error) {
+                return done(error, null) ;
             }
-            return done(null, user);
         },
     ),
 );
@@ -32,8 +36,8 @@ passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser(async(id, done) => {
-    const user = await User.findById(id);
+passport.deserializeUser(async(userId, done) => {
+    const user = await userService.findOne({ _id : userId });
     done(null, user);
 });
 
