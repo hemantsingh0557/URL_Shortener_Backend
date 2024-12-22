@@ -18,6 +18,9 @@ const config = {
             callbackUrl: process.env.GOOGLE_CALLBACK_URL,
         },
     } ,
+    session: {
+        secret: process.env.SESSION_SECRET, 
+    },
 };
 
 export default config;

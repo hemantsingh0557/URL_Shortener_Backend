@@ -2,8 +2,10 @@ import express from "express" ;
 import { allRoutes } from "../routes/index.js";
 import { validateSchema } from "../utils/helperFunctions.js";
 import { authenticateToken } from "../middleware/index.js";
-import authRoutes from "../routes/authRoute.js";
-
+import { authRoutes } from "../routes/authRoute.js";
+import passport from "passport";
+import session from "express-session";
+import config from "../config/index.js";
 
 
 const handler = (controller) =>{
@@ -27,6 +29,15 @@ const handler = (controller) =>{
 
 
 export async function expressStartup(app) {
+
+    app.use(session({
+        secret: config.session.secret ,
+        resave: false,
+        saveUninitialized: true,
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
     app.use(express.json()) ;
     app.use("/auth", authRoutes); 
     app.get( "/" , (req, res) => {
