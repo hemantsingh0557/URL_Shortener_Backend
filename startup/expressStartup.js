@@ -2,6 +2,7 @@ import express from "express" ;
 import { allRoutes } from "../routes/index.js";
 import { validateSchema } from "../utils/helperFunctions.js";
 import { authenticateToken } from "../middleware/index.js";
+import authRoutes from "../routes/authRoute.js";
 
 
 
@@ -27,6 +28,7 @@ const handler = (controller) =>{
 
 export async function expressStartup(app) {
     app.use(express.json()) ;
+    app.use("/auth", authRoutes); 
     app.get( "/" , (req, res) => {
         res.send("This is URL Shortener Backend") ;
     } );
