@@ -21,6 +21,12 @@ const config = {
     session: {
         secret: process.env.SESSION_SECRET, 
     },
+    redis: {
+        username: process.env.REDIS_USERNAME, 
+        host: process.env.REDIS_HOST, 
+        port: process.env.REDIS_PORT, 
+        password: process.env.REDIS_PASSWORD, 
+    },
 };
 
 export default config;
