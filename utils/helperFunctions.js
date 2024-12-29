@@ -51,6 +51,18 @@ export const validateSchema = (schema) => {
 
 
 
+const BASE62_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export function generateRandomString(length= 8) {
+    let randomString = "";
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * BASE62_CHARS.length);
+        randomString += BASE62_CHARS[randomIndex];
+    }
+    return randomString;
+}
+
+
+
 
 
 
