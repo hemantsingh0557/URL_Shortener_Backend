@@ -11,18 +11,17 @@ import config from "../config/index.js";
 const handler = (controller) =>{
     return (req , res) => {
         const payload = {
-            ...(res.body || {}) ,
-            ...(res.params || {}) ,
-            ...(res.query || {}) ,
+            ...(req.body || {}) ,
+            ...(req.params || {}) ,
+            ...(req.query || {}) ,
             userId : req.userId ,
-            files : req.files ,
         } ;
         controller(payload)
             .then(async(result) => {
-                res.status(result.statusCode).json(result.data) ;
+                res.status(result.statusCode).json(result) ;
             })
             .catch(async(error) => {
-                res.status(error.statusCode || 500 ).json({ message : error.message }) ;
+                res.status(error.statusCode || 500 ).json(error) ;
             }) ;
     } ;
 } ;
