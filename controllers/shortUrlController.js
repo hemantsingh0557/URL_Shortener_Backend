@@ -9,7 +9,7 @@ export const shortUrlController = {} ;
 
 shortUrlController.createShortUrl = async(payload) => {
     const { userId , longUrl, customAlias, topic } = payload;
-    const isLongUrlAlreadyShortenedForUser = await shortUrlServices.findOne({ _id : userId , longUrl : longUrl }) ;
+    const isLongUrlAlreadyShortenedForUser = await shortUrlServices.findOne({ userId : userId , longUrl : longUrl }) ;
     if( isLongUrlAlreadyShortenedForUser ) {
         return createErrorResponse( MESSAGES.LONG_URL_ALREADY_SHORTENED , CONSTANTS.ERROR_TYPES.ALREADY_EXISTS ) ;
     }
