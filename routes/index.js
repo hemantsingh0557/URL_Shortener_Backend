@@ -1,5 +1,5 @@
 
+import { shortUrlRoutes } from "./shortUrlRoutes.js";
 
-
-export const allRoutes = [ ] ;
+export const allRoutes = [ ...shortUrlRoutes ] ;
 
