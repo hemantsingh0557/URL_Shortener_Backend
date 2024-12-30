@@ -15,25 +15,9 @@ const urlAnalyticsSchema = new mongoose.Schema(
             type: String, 
             required: true, 
         },
-        uniqueClicksForOs: { 
-            type: Number, 
-            default: 0, 
-        },
-        uniqueUsersForOs: { 
-            type: Number, 
-            default: 0, 
-        },
         deviceType: { 
             type: String, 
             required: true, 
-        },
-        uniqueClicksForDevice: { 
-            type: Number, 
-            default: 0, 
-        },
-        uniqueUsersForDevice: { 
-            type: Number, 
-            default: 0, 
         },
         ipAddress: { 
             type: String, 
