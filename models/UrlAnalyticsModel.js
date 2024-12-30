@@ -24,7 +24,9 @@ const urlAnalyticsSchema = new mongoose.Schema(
             required: true, 
         },
         geolocation: { 
-            type: String, 
+            type: Map, 
+            of: String, //  Dynamic key-value pairs for geolocation attributes
+            default: {} ,
         },
     },
     {
