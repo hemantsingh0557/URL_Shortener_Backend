@@ -39,3 +39,28 @@ shortUrlController.createShortUrl = async(payload) => {
     });
         
 } ;
+
+
+shortUrlController.getLongUrlOfShortUrl = async(payload) => {
+    const { alias } = payload;
+    const longUrl = await redisClient.get(alias);
+    if (longUrl) {
+        return createSuccessResponse(MESSAGES.LONG_URL_FOUND, {
+            shortUrl: alias,
+            longUrl: longUrl,
+        });
+    }
+    const urlFromDb = await shortUrlServices.findOne({ shortUrl: alias });
+    if (urlFromDb) {
+        await redisClient.set(alias, urlFromDb.longUrl);
+        return createSuccessResponse(MESSAGES.LONG_URL_FOUND, {
+            shortUrl: alias,
+            longUrl: urlFromDb.longUrl,
+        });
+    }
+    return createErrorResponse(MESSAGES.LONG_URL_NOT_FOUND, CONSTANTS.ERROR_TYPES.DATA_NOT_FOUND);
+} ;
+
+
+
+
