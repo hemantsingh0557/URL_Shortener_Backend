@@ -23,7 +23,8 @@
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "ua-parser-js": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
