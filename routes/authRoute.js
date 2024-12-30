@@ -15,9 +15,9 @@ authRoutes.get("/google/callback", passport.authenticate("google", { failureRedi
     if (!req.user) {
         return res.status(401).json(createErrorResponse(MESSAGES.AuthenticationFailed, CONSTANTS.ERROR_TYPES.UNAUTHORIZED));
     }
-    const { googleId, email, name } = req.user;
+    const { _id, email, name } = req.user;
     const tokenPayload = {
-        id: googleId,
+        userId : _id,
         email,
         name,
     };
