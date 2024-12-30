@@ -16,4 +16,16 @@ export const shortUrlRoutes = [
         auth : true ,
         controller : shortUrlController.createShortUrl,
     } ,
+    {
+        method: "get",
+        path : "/api/shorten/:alias",
+        schema : {
+            params : Joi.object({
+                alias : Joi.string().required(),
+            }).required(),
+        },
+        auth : false ,
+        controller : shortUrlController.getLongUrlOfShortUrl,
+    } ,
 ] ;
+
