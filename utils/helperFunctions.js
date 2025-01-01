@@ -48,8 +48,6 @@ export const validateSchema = (schema) => {
     } ;
 } ;
 
-
-
 const BASE62_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export function generateRandomString(length= 8) {
     let randomString = "";
