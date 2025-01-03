@@ -2,7 +2,7 @@ import { CONSTANTS } from "../utils/constants.js";
 import { MESSAGES } from "../utils/messages.js";
 import { createErrorResponse, createSuccessResponse } from "../utils/responseHelper.js";
 import { shortUrlServices, urlAnalyticsServices } from "../services/index.js";
-import { generateRandomString, getGeolocation } from "../utils/helperFunctions.js";
+import { helperFunctions } from "../utils/helperFunctions.js";
 import redisClient from "../config/redis.js";
 
 
@@ -23,7 +23,7 @@ shortUrlController.createShortUrl = async(payload) => {
         shortUrl = customAlias;
     } 
     else {
-        shortUrl = generateRandomString(8); // 8 is length of random short url 
+        shortUrl = helperFunctions.generateRandomString(8); // 8 is length of random short url 
     }
     const newShortUrl = await shortUrlServices.create({
         userId, 
@@ -44,29 +44,22 @@ shortUrlController.createShortUrl = async(payload) => {
 
 shortUrlController.getLongUrlOfShortUrl = async(payload) => {
     const { alias , userIpAddress , userDeviceType , userOsType } = payload;
-    let longUrl = await redisClient.get(alias);
-    if (!longUrl) {
-        const urlFromDb = await shortUrlServices.findOne({ shortUrl: alias });
-        if (!urlFromDb) {
-            return createErrorResponse(MESSAGES.LONG_URL_NOT_FOUND, CONSTANTS.ERROR_TYPES.DATA_NOT_FOUND);
-        }
-        longUrl = urlFromDb.longUrl;
-        await redisClient.set(alias, longUrl);
+    const urlFromDb = await shortUrlServices.findOne({ shortUrl: alias });
+    if (!urlFromDb) {
+        return createErrorResponse(MESSAGES.LONG_URL_NOT_FOUND, CONSTANTS.ERROR_TYPES.DATA_NOT_FOUND);
     }
-    const redirectResponse = createSuccessResponse(MESSAGES.REDIRECTING, {
-        longUrl: longUrl,
-        redirectUrl: longUrl,
-    });
-
-    const geolocation = getGeolocation(userIpAddress) ;
-    const shortUrl = await shortUrlServices.findOne({ shortUrl: alias });
+    const geolocation = helperFunctions.getGeolocation(userIpAddress) ;
     await urlAnalyticsServices.create({
-        shortUrlId: shortUrl._id,
+        shortUrlId: urlFromDb._id,
         clickTimestamp: Date.now(),
         osName: userOsType,
         deviceType: userDeviceType,
         ipAddress: userIpAddress,
         geolocation: geolocation, 
+    });
+    const redirectResponse = createSuccessResponse(MESSAGES.REDIRECTING, {
+        longUrl: urlFromDb.longUrl,
+        redirectUrl: urlFromDb.longUrl,
     });
     return redirectResponse;
 };
