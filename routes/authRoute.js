@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { generateJWTAccessToken } from "../utils/helperFunctions.js";
+import { helperFunctions } from "../utils/helperFunctions.js";
 import { createErrorResponse, createSuccessResponse } from "../utils/responseHelper.js";
 import { MESSAGES } from "../utils/messages.js";
 import { CONSTANTS } from "../utils/constants.js";
@@ -21,7 +21,7 @@ authRoutes.get("/google/callback", passport.authenticate("google", { failureRedi
         email,
         name,
     };
-    const token = generateJWTAccessToken(tokenPayload);
+    const token = helperFunctions.generateJWTAccessToken(tokenPayload);
     return res.json(createSuccessResponse(MESSAGES.LoggedInSuccessfully, {
         token,
         user: req.user,
