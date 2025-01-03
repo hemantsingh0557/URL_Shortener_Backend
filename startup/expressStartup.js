@@ -1,6 +1,6 @@
 import express from "express" ;
 import { allRoutes } from "../routes/index.js";
-import { validateSchema } from "../utils/helperFunctions.js";
+import { helperFunctions } from "../utils/helperFunctions.js";
 import { authenticateToken } from "../middleware/index.js";
 import { authRoutes } from "../routes/authRoute.js";
 import passport from "passport";
@@ -57,7 +57,7 @@ export async function expressStartup(app) {
     allRoutes.forEach((route) => {
         const { method, path, schema = {}, auth = false, controller } = route;
         const middleware = [] ;
-        if( schema ) { middleware.push(validateSchema(schema)) ; }
+        if( schema ) { middleware.push(helperFunctions.validateSchema(schema)) ; }
         if( auth ) { middleware.push(authenticateToken) ; }
         app[method](path , ...middleware , handler(controller) ) ;
     });
