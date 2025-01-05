@@ -4,8 +4,6 @@ import { dbConnection } from "./startup/dbConnection.js";
 import { expressStartup } from "./startup/expressStartup.js";
 import config from "./config/index.js";
 import { redisConnection } from "./startup/redisConnection.js";
-// eslint-disable-next-line no-unused-vars
-import passport from "./config/passport.js";
 
 const app = express() ;
 

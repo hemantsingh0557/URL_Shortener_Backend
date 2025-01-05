@@ -3,7 +3,7 @@ import { allRoutes } from "../routes/index.js";
 import { helperFunctions } from "../utils/helperFunctions.js";
 import { authenticateToken } from "../middleware/index.js";
 import { authRoutes } from "../routes/authRoute.js";
-import passport from "passport";
+import passport from "../config/passport.js";
 import session from "express-session";
 import config from "../config/index.js";
 import { UAParser } from "ua-parser-js";
