@@ -1,7 +1,7 @@
 
 import jwt from "jsonwebtoken" ; 
 import config from "../config/index.js";
-// import geoip from "geoip-lite";
+import ipinfo from "ipinfo";
 
 export const helperFunctions = {} ;
 
@@ -50,45 +50,58 @@ helperFunctions.validateSchema = (schema) => {
     } ;
 } ;
 
-// const BASE62_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-// helperFunctions.generateRandomString = (length= 8) => {
-//     let randomString = "";
-//     for (let i = 0; i < length; i++) {
-//         const randomIndex = Math.floor(Math.random() * BASE62_CHARS.length);
-//         randomString += BASE62_CHARS[randomIndex];
-//     }
-//     return randomString;
-// };
+const BASE62_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+helperFunctions.generateRandomString = (length= 8) => {
+    let randomString = "";
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * BASE62_CHARS.length);
+        randomString += BASE62_CHARS[randomIndex];
+    }
+    return randomString;
+};
 
-// helperFunctions.getGeolocation = (ipAddress) => {
-//     // Handle localhost IP addresses
-//     if (ipAddress === "::1" || ipAddress === "127.0.0.1") {
-//         return {
-//             ip: ipAddress,
-//             city: "Localhost",
-//             region: "Localhost",
-//             country: "Localhost",
-//             postalCode: "Unknown",
-//             latitude: "0.0",
-//             longitude: "0.0",
-//             timezone: "Localhost",
-//         };
-//     }
 
-//     const geo = geoip.lookup(ipAddress);
-//     return geo
-//         ? {
-//             ip: ipAddress || "Unknown",
-//             city: geo.city || "Unknown",
-//             region: geo.region || "Unknown",
-//             country: geo.country || "Unknown",
-//             postalCode: geo.postal || "Unknown",
-//             latitude: geo.ll ? geo.ll[0] : "Unknown",
-//             longitude: geo.ll ? geo.ll[1] : "Unknown",
-//             timezone: geo.timezone || "Unknown",
-//         }
-//         : {};
-// };
+
+helperFunctions.getGeolocation = async(ipAddress) => {
+    try {
+        if (ipAddress === "::1" || ipAddress === "127.0.0.1") {
+            return {
+                ip: ipAddress,
+                city: "Localhost",
+                region: "Localhost",
+                country: "Localhost",
+                postalCode: "Unknown",
+                latitude: "0.0",
+                longitude: "0.0",
+                timezone: "Localhost",
+            };
+        }
+        const token = config.ipinfo.token ; 
+        const details = await ipinfo(ipAddress, token);
+        return {
+            ip: details.ip || "Unknown",
+            city: details.city || "Unknown",
+            region: details.region || "Unknown",
+            country: details.country || "Unknown",
+            postalCode: details.postal || "Unknown",
+            latitude: details.loc ? details.loc.split(",")[0] : "Unknown",
+            longitude: details.loc ? details.loc.split(",")[1] : "Unknown",
+            timezone: details.timezone || "Unknown",
+        };
+    } catch (error) {
+        console.error("Error fetching IP info:", error.message);
+        return {
+            ip: ipAddress || "Unknown",
+            city: "Unknown",
+            region: "Unknown",
+            country: "Unknown",
+            postalCode: "Unknown",
+            latitude: "Unknown",
+            longitude: "Unknown",
+            timezone: "Unknown",
+        };
+    }
+};
 
 
 

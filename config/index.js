@@ -26,6 +26,9 @@ const config = {
         port: process.env.REDIS_PORT, 
         password: process.env.REDIS_PASSWORD, 
     },
+    ipinfo: {
+        token: process.env.IPINFO_TOKEN, 
+    },
 };
 
 export default config;
