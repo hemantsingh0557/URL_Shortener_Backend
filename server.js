@@ -4,8 +4,11 @@ import { dbConnection } from "./startup/dbConnection.js";
 import { expressStartup } from "./startup/expressStartup.js";
 import config from "./config/index.js";
 import { redisConnection } from "./startup/redisConnection.js";
+import cors from "cors";
 
-const app = express() ;
+const app = express();
+
+app.use(cors());
 
 const startServer = async() => {
     await dbConnection() ;

@@ -7,6 +7,14 @@ import passport from "../config/passport.js";
 import session from "express-session";
 import config from "../config/index.js";
 import { UAParser } from "ua-parser-js";
+import path from "path";
+import { fileURLToPath } from "url";
+import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const swaggerPath = path.join(__dirname, "../docs/swagger.json");
 
 const handler = (controller) =>{
     return (req , res) => {
@@ -61,6 +69,8 @@ export async function expressStartup(app) {
         if( auth ) { middleware.push(authenticateToken) ; }
         app[method](path , ...middleware , handler(controller) ) ;
     });
+    const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf8"));
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
 
