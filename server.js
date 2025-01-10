@@ -8,12 +8,12 @@ import cors from "cors";
 
 const app = express();
 
-app.use(
-    cors({
-        origin: "*",
-        credentials: true,
-    }),
-);
+app.use(cors({
+    origin: ["http://localhost:3030", "https://url-shortener-backend-api.vercel.app"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
 const startServer = async() => {
     await dbConnection();
