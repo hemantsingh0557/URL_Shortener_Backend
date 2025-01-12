@@ -1,4 +1,3 @@
-
 import express from "express";
 import { dbConnection } from "./startup/dbConnection.js";
 import { expressStartup } from "./startup/expressStartup.js";
@@ -8,11 +7,29 @@ import cors from "cors";
 
 const app = express();
 
+const allowedOrigins = [
+    `http://localhost:${config.server.port}`,
+    "https://url-shortener-backend-api.vercel.app",
+    "http://localhost:8080",
+    // Add any frontend URLs that will access this API
+];
+
 app.use(cors({
-    origin: ["http://localhost:3030", "https://url-shortener-backend-api.vercel.app"],
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) {return callback(null, true);}
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Length", "X-Powered-By", "ETag"],
+    maxAge: 86400, // 24 hours
 }));
 
 const startServer = async() => {
@@ -27,4 +44,3 @@ const startServer = async() => {
 startServer().catch((error) => {
     console.error("Failed to start the server:", error);
 });
-

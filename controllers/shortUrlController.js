@@ -4,6 +4,7 @@ import { createErrorResponse, createSuccessResponse } from "../utils/responseHel
 import { shortUrlServices, urlAnalyticsServices } from "../services/index.js";
 import { helperFunctions } from "../utils/helperFunctions.js";
 import redisClient from "../config/redis.js";
+import config from "../config/index.js";
 
 
 export const shortUrlController = {} ;
@@ -33,13 +34,14 @@ shortUrlController.createShortUrl = async(payload) => {
         topic,
     });
     await redisClient.set(shortUrl, longUrl);
+    const fullShortUrl = `${config.baseUrl.shortBaseUrl}/${shortUrl}` ; 
     return createSuccessResponse(MESSAGES.SHORT_URL_CREATED, {
-        shortUrl: newShortUrl.shortUrl,
+        shortUrl: fullShortUrl,
         longUrl: newShortUrl.longUrl,
         createdAt: newShortUrl.createdAt,
     });
-        
-} ; 
+};
+
 
 
 shortUrlController.getLongUrlOfShortUrl = async(payload) => {

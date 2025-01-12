@@ -29,6 +29,9 @@ const config = {
     ipinfo: {
         token: process.env.IPINFO_TOKEN, 
     },
+    baseUrl : {
+        shortBaseUrl : process.env.BASE_URL ,
+    } ,
 };
 
 export default config;

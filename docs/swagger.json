@@ -45,6 +45,15 @@
     }
   },
   "paths": {
+    "/api/auth/google": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Sign in with Google",
+        "description": "Click to sign in with Google. After signing in, copy the token and paste it in the 'Authorization' header in Swagger UI. [Sign in with Google (Local)](http://localhost:3030/auth/google) or [Sign in with Google (Production)](https://url-shortener-backend-api.vercel.app/auth/google)"
+      }
+    },
+
+
     "/api/shorten": {
       "post": {
         "tags": ["URL Shortener"],
