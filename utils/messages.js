@@ -13,5 +13,5 @@ export const MESSAGES = {
     ANALYTICS_DATA_FOUND_FOR_TOPIC: "Analytics data successfully found for the specified topic.",
     NO_URLS_IN_TOPIC: "No URLs found for the specified topic.",
     ANALYTICS_DATA_FOUND_FOR_USER: "Analytics data successfully found for the user's short URLs.",
-    NO_URLS_CREATED: "No URLs have been created by the authenticated user.",
+    NO_URLS_FOUND_FOR_USER: "No URLs have been found for the authenticated user.",
 };

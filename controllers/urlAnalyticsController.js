@@ -55,6 +55,7 @@ urlAnalyticsController.getShortUrlAnalytics = async(payload) => {
                     },
                     {
                         $project: {
+                            _id : 0 ,
                             osName: "$_id",
                             uniqueClicks: 1,
                             uniqueUsers: { $size: "$uniqueUsers" },
@@ -71,6 +72,7 @@ urlAnalyticsController.getShortUrlAnalytics = async(payload) => {
                     },
                     {
                         $project: {
+                            _id : 0 ,
                             deviceName: "$_id",
                             uniqueClicks: 1,
                             uniqueUsers: { $size: "$uniqueUsers" },
@@ -82,10 +84,10 @@ urlAnalyticsController.getShortUrlAnalytics = async(payload) => {
     ]);
     return createSuccessResponse(MESSAGES.ANALYTICS_DATA_FOUND_FOR_SHORT_URL, {
         totalClicks: urlFromDb.totalClicks, 
-        uniqueUsers: analytics.uniqueUsers?.[0]?.uniqueUserCount || 0,
-        clicksByDate: analytics.clicksByDate || [],
-        osType: analytics.osType || [],
-        deviceType: analytics.deviceType || [],
+        uniqueUsers: analytics[0].uniqueUsers?.[0]?.uniqueUserCount || 0,
+        clicksByDate: analytics[0].clicksByDate || [],
+        osType: analytics[0].osType || [],
+        deviceType: analytics[0].deviceType || [],
     });  
 };
 
@@ -117,6 +119,7 @@ urlAnalyticsController.getTopicBasedAnalytics = async(payload) => {
                     },
                     {
                         $project: {
+                            _id : 0 ,
                             shortUrl: "$_id",
                             totalClicks: 1,
                             uniqueUsers: { $size: "$uniqueUsers" },
@@ -127,10 +130,10 @@ urlAnalyticsController.getTopicBasedAnalytics = async(payload) => {
         } ,
     ]);
     return createSuccessResponse(MESSAGES.ANALYTICS_DATA_FOUND_FOR_TOPIC, {
-        totalClicks: analytics.totalClicks[0]?.totalClicks || 0,
-        uniqueUsers: analytics.uniqueUsers?.[0]?.uniqueUserCount || 0,
-        clicksByDate: analytics.clicksByDate || [],
-        urls: analytics.urls || [],
+        totalClicks: analytics[0].totalClicks[0]?.totalClicks || 0,
+        uniqueUsers: analytics[0].uniqueUsers?.[0]?.uniqueUserCount || 0,
+        clicksByDate: analytics[0].clicksByDate || [],
+        urls: analytics[0].urls || [],
     });
 };
 
@@ -156,21 +159,21 @@ urlAnalyticsController.getOverallAnalytics = async(payload) => {
                 ],
                 osType: [
                     { $group: { _id: "$osName", uniqueClicks: { $sum: 1 }, uniqueUsers: { $addToSet: "$ipAddress" } } },
-                    { $project: { osName: "$_id", uniqueClicks: 1, uniqueUsers: { $size: "$uniqueUsers" } } } ,
+                    { $project: { _id : 0 , osName: "$_id", uniqueClicks: 1, uniqueUsers: { $size: "$uniqueUsers" } } } ,
                 ],
                 deviceType: [
                     { $group: { _id: "$deviceType", uniqueClicks: { $sum: 1 }, uniqueUsers: { $addToSet: "$ipAddress" } } },
-                    { $project: { deviceName: "$_id", uniqueClicks: 1, uniqueUsers: { $size: "$uniqueUsers" } } } ,
+                    { $project: { _id : 0 , deviceName: "$_id", uniqueClicks: 1, uniqueUsers: { $size: "$uniqueUsers" } } } ,
                 ] ,
             } ,
         } ,
     ]);
     return createSuccessResponse(MESSAGES.ANALYTICS_DATA_FOUND_FOR_USER, {
         totalUrls: urlsCreatedByUser.length,
-        totalClicks: analytics.totalClicks?.[0]?.totalClicks || 0,
-        uniqueUsers: analytics.uniqueUsers?.[0]?.uniqueUserCount || 0,
-        clicksByDate: analytics.clicksByDate || [],
-        osType: analytics.osType || [],
-        deviceType: analytics.deviceType || [],
+        totalClicks: analytics[0].totalClicks?.[0]?.totalClicks || 0,
+        uniqueUsers: analytics[0].uniqueUsers?.[0]?.uniqueUserCount || 0,
+        clicksByDate: analytics[0].clicksByDate || [],
+        osType: analytics[0].osType || [],
+        deviceType: analytics[0].deviceType || [],
     });
 };

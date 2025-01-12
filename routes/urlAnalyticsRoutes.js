@@ -27,9 +27,9 @@ export const urlAnalyticsRoutes = [
     },
     {
         method: "get",
-        path: "/api/analytics/overall",
+        path: "/api/overallAnalytics/overall",
         schema: {
-            params: Joi.object({}).required(),
+            // params: Joi.object({}).required(),
         },
         auth: true,
         controller: urlAnalyticsController.getOverallAnalytics,

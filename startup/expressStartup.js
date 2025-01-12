@@ -35,9 +35,9 @@ const handler = (controller) =>{
         };
         controller(payload)
             .then(async(result) => {
-                if (result.data && result.data.redirectUrl) {
-                    return res.redirect(result.data.redirectUrl) ; 
-                }
+                // if (result.data && result.data.redirectUrl) {
+                //     return res.redirect(result.data.redirectUrl) ; 
+                // }
                 res.status(result.statusCode).json(result) ;
             })
             .catch(async(error) => {

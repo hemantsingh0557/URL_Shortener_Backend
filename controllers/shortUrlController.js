@@ -39,16 +39,19 @@ shortUrlController.createShortUrl = async(payload) => {
         createdAt: newShortUrl.createdAt,
     });
         
-} ;
+} ; 
 
 
 shortUrlController.getLongUrlOfShortUrl = async(payload) => {
     const { alias , userIpAddress , userDeviceType , userOsType } = payload;
-    const urlFromDb = await shortUrlServices.findOne({ shortUrl: alias });
+    const urlFromDb = await shortUrlServices.findOneAndUpdate(
+        { shortUrl: alias }, 
+        { $inc: { totalClicks: 1 } } ,
+    );
     if (!urlFromDb) {
         return createErrorResponse(MESSAGES.LONG_URL_NOT_FOUND, CONSTANTS.ERROR_TYPES.DATA_NOT_FOUND);
     }
-    const geolocation = helperFunctions.getGeolocation(userIpAddress) ;
+    const geolocation = await helperFunctions.getGeolocation(userIpAddress) ;
     await urlAnalyticsServices.create({
         shortUrlId: urlFromDb._id,
         clickTimestamp: Date.now(),
